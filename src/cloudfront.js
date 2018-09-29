@@ -1,7 +1,8 @@
 process.env.AWS_SDK_LOAD_CONFIG = true
 
-const aws        = require('aws-sdk'),
-      cloudfront = new aws.CloudFront()
+const aws = require('aws-sdk')
+const region = aws.config.region
+const cloudfront = new aws.CloudFront()
 
 /**
  * @async
@@ -24,12 +25,18 @@ const listDistributions = () => (
  * @param {string} bucket name of the bucket to check against
  * @return {string} Id of the bucket
  */
-const getDistributionId = (list, bucket) => (
-  list.DistributionList.Items[[].concat.apply([],
-    list.DistributionList.Items
-      .map(e => e.Origins.Items)
-      .map(e => e.map(i => i.Id.substring(3)))).findIndex(i => i === bucket)].Id
-)
+const getDistributionId = (list, region, bucket) =>
+{
+  const domainToFind = `${bucket}.s3-website-${region}.amazonaws.com`
+  const matchingItem = list.DistributionList.Items.find(e => 
+      e.Origins.Items.find(z => z.DomainName === domainToFind))
+
+  if (!matchingItem) {
+    throw new Error(`No match found on the provided bucket ${bucket}`)
+  }
+
+  return matchingItem.Id
+}
 
 /**
  * @async
@@ -44,7 +51,7 @@ const invalidateBucket = bucket => (
     listDistributions()
       .then(r => {
         cloudfront.createInvalidation({
-          DistributionId: getDistributionId(r, bucket),
+          DistributionId: getDistributionId(r, region, bucket),
           InvalidationBatch: {
             CallerReference: Date.now().toString(),
             Paths: {

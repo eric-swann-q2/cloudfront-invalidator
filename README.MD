@@ -1,12 +1,12 @@
-# CloudFront-Invalidator 
-
+# AWS-CloudFront-Invalidator 
+Forked from cloudfront-invalidator
 A command line tool that invalidates the cahce of a web hosting CloudFront distribution by giving a S3 Bucket name. 
 ### Installing
 
 install globally via npm:
 
 ```
-npm i -g cloudfront-invalidator
+npm i -g aws-cloudfront-invalidator
 ```
 
 ### Usage

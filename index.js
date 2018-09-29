@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-const program    = require('commander')
-      cloudfront = require('./src/cloudfront')
+const program = require('commander')
+const cloudfront = require('./src/cloudfront')
 
 program
   .version('1.0.0')

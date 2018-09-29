@@ -1,6 +1,6 @@
 {
-  "name": "cloudfront-invalidator",
-  "version": "1.2.1-0",
+  "name": "aws-cloudfront-invalidator",
+  "version": "1.2.2",
   "description": "A CLI tool that invalidates CloudFront distributions",
   "main": "index.js",
   "keywords": [
