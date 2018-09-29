@@ -35,6 +35,8 @@ const getDistributionId = (list, region, bucket) =>
     throw new Error(`No match found on the provided bucket ${bucket}`)
   }
 
+  console.log(`Found distribution ${matchingItem.Id} for bucket ${bucket}.`)
+
   return matchingItem.Id
 }
 
