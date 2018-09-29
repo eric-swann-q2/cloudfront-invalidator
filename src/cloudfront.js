@@ -27,9 +27,15 @@ const listDistributions = () => (
  */
 const getDistributionId = (list, region, bucket) =>
 {
-  const domainToFind = `${bucket}.s3-website-${region}.amazonaws.com`
-  const matchingItem = list.DistributionList.Items.find(e => 
-      e.Origins.Items.find(z => z.DomainName === domainToFind))
+  //Look for region specific bucket created by CloudFormation script
+  let matchingItem = list.DistributionList.Items.find(e => 
+      e.Origins.Items.find(z => z.DomainName === `${bucket}.s3-website-${region}.amazonaws.com`))
+
+  if(!matchingItem) {
+    //Look for manually created bucket without region in origin
+    matchingItem = list.DistributionList.Items.find(e => 
+        e.Origins.Items.find(z => z.DomainName === `${bucket}.s3.amazonaws.com`))
+  }
 
   if (!matchingItem) {
     throw new Error(`No match found on the provided bucket ${bucket}`)
